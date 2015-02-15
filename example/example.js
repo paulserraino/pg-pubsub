@@ -5,7 +5,6 @@ var connect = require('../tests/connect')
 connect(function (client) {
 
 	var pge = PGEvents(client);
-
 	pge.subscribe('users', function (err) {
 		if (err) throw err;
 	});

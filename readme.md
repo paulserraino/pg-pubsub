@@ -2,13 +2,13 @@
 Postgres pub/sub
 
 ##Setup
-```
+```bash
 psql -h localhost -d mydb < install.sql
 ```
 
 ##Example
 
-```
+```js
 var pgEvent = require('pg-event')(client);
 
 pgEvent.subscribe('users')
