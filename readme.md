@@ -1,4 +1,4 @@
-#PG Events
+#PG PubSub
 Postgres pub/sub
 
 ##Setup

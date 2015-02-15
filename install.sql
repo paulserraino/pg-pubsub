@@ -4,10 +4,10 @@ DECLARE
   result record;
 BEGIN
 	IF TG_OP = 'INSERT' THEN
-		_json_ := '{"table": "' || TG_TABLE_NAME || '",
-  		"operation": "insert",
-		  "timestamp": "' || CURRENT_TIMESTAMP || '",
-		  "data": ' || row_to_json(NEW) || '}';
+    _json_ := '{"table": "' || TG_TABLE_NAME || '",
+      "operation": "insert",
+      "timestamp": "' || CURRENT_TIMESTAMP || '",
+      "data": ' || row_to_json(NEW) || '}';
 
   ELSIF TG_OP = 'UPDATE' THEN
     _json_ := '{"table": "' || TG_TABLE_NAME || '",
