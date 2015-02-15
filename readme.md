@@ -1,7 +1,7 @@
 #PG Dispatch
 Postgres pub/sub
 
-[![NPM](https://nodei.co/npm/pg.png)](https://nodei.co/npm/pg-dispatch/)
+[![NPM](https://nodei.co/npm/pg-dispatch.png)](https://nodei.co/npm/pg-dispatch/)
 
 ##Setup
 ```bash
