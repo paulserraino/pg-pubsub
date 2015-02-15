@@ -5,23 +5,23 @@ var connect = require('./connect')
 
 before(function (done) {
   var self = this;
-	connect(function (client) {
-		self.client = client
+  connect(function (client) {
+    self.client = client
     self.pgevents = PGEvents(client)
     done()
-	})
+  })
 })
 
 describe('PG Events', function() {
 
-	describe('.subcribe', function () {
-		it('should subcribe to table', function (done) {
-			this.pgevents.subscribe('users', function (error) {
-				if (error) return done(error)
+  describe('.subcribe', function () {
+    it('should subcribe to table', function (done) {
+      this.pgevents.subscribe('users', function (error) {
+        if (error) return done(error)
         done()
-			})
-		})
-	})
+      })
+    })
+  })
 
   describe('table:insert', function () {
 
@@ -34,7 +34,7 @@ describe('PG Events', function() {
     })
 
     it('should send JSON message',function (done) {
-      var self = this 
+      var self = this
       this.client.query("insert into users (name) values ('pat')", function (error) {
         if (error) return done(error)
 

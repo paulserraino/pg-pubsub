@@ -3,9 +3,6 @@ Postgres pub/sub
 
 ##Setup
 ```
-
-```
-```
 psql -h localhost -d mydb < install.sql
 ```
 

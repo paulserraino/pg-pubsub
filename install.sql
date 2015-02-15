@@ -1,6 +1,6 @@
 CREATE OR REPLACE FUNCTION notify_trigger() RETURNS trigger AS $$
 DECLARE
-	_json_ text := '{}';
+  _json_ text := '{}';
   result record;
 BEGIN
 	IF TG_OP = 'INSERT' THEN
