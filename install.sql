@@ -1,6 +1,7 @@
 CREATE OR REPLACE FUNCTION notify_trigger() RETURNS trigger AS $$
 DECLARE
 	_json_ text := '{}';
+  result record;
 BEGIN
 	IF TG_OP = 'INSERT' THEN
 		_json_ := '{"table": "' || TG_TABLE_NAME || '",
@@ -9,10 +10,10 @@ BEGIN
 		  "data": ' || row_to_json(NEW) || '}';
 
   ELSIF TG_OP = 'UPDATE' THEN
-    _json_ := '{"table:" "' || TG_TABLE_NAME || '",
+    _json_ := '{"table": "' || TG_TABLE_NAME || '",
       "operation": "update",
       "timestamp": "' || CURRENT_TIMESTAMP || '",
-      "old_data": "' || row_to_json(OLD) || ',
+      "old_data": ' || row_to_json(OLD) || ',
       "data": ' || row_to_json(NEW) || '}';
 
   ELSIF TG_OP = 'DELETE' THEN
