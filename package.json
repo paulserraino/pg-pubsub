@@ -1,16 +1,24 @@
 {
-  "name": "pg-events",
+  "name": "pg-dispatch",
   "version": "0.0.0",
   "description": "postgreSQL listen/notify events",
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha tests/"
   },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/paulserraino/pg-pubsub.git"
+  },
   "keywords": [
     "pg",
     "listen",
     "notify",
-    "events"
+    "events",
+    "dispatch",
+    "pubsub",
+    "pub",
+    "sub"
   ],
   "author": {
     "name": "Paul Serraino",

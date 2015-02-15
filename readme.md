@@ -1,7 +1,12 @@
-#PG PubSub
+#PG Dispatch
 Postgres pub/sub
 
+[![NPM](https://nodei.co/npm/pg.png)](https://nodei.co/npm/pg-dispatch/)
+
 ##Setup
+```bash
+npm install pg-dispatch
+```
 ```bash
 psql -h localhost -d mydb < install.sql
 ```
@@ -9,10 +14,10 @@ psql -h localhost -d mydb < install.sql
 ##Example
 
 ```js
-var pgEvent = require('pg-event')(client);
+var dispatcher = require('pg-dispatch')(client);
 
-pgEvent.subscribe('users')
-pgEvent.on('users:insert', function (error, data) {
+dispatcher.subscribe('users')
+dispatcher.on('users:insert', function (error, data) {
 	if (error) throw error;	
 });
 ```
