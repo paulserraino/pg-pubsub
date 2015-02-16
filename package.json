@@ -1,6 +1,6 @@
 {
   "name": "pg-dispatch",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "postgreSQL listen/notify events",
   "main": "index.js",
   "scripts": {
@@ -25,9 +25,6 @@
     "url": "http://paulserraino.com"
   },
   "license": "MIT",
-  "dependencies": {
-    "inherits": "~2.0.1"
-  },
   "devDependencies": {
     "mocha": "~2.1.0",
     "pg": "~4.2.0",
