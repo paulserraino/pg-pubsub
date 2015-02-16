@@ -1,5 +1,5 @@
 var EventEmitter = require('events').EventEmitter;
-var inherits = require('inherits');
+var utils = require('util');
 
 function PGEvents (client) {
   if (!(this instanceof PGEvents)) return new PGEvents(client);
@@ -7,7 +7,7 @@ function PGEvents (client) {
   this.client = client;
 };
 
-inherits(PGEvents, EventEmitter);
+utils.inherits(PGEvents, EventEmitter);
 
 PGEvents.prototype.subscribe = function (table, cb) {
   var self = this;
