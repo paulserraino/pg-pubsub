@@ -1,51 +1,44 @@
-CREATE OR REPLACE FUNCTION notify_trigger() RETURNS trigger AS $$
+CREATE OR REPLACE FUNCTION {{= it.names.notifyTriggerFunc }}() RETURNS trigger AS $$
 DECLARE
-  _json_ text := '{}';
-  result record;
+  data text := '{}';
 BEGIN
-	IF TG_OP = 'INSERT' THEN
-    _json_ := '{"table": "' || TG_TABLE_NAME || '",
-      "operation": "insert",
-      "timestamp": "' || CURRENT_TIMESTAMP || '",
-      "data": ' || row_to_json(NEW) || '}';
+  data := '{"table": "' || TG_TABLE_NAME || '",
+      "operation": "' || TG_OP || '",
+      "timestamp": "' || CURRENT_TIMESTAMP || '"';
 
-  ELSIF TG_OP = 'UPDATE' THEN
-    _json_ := '{"table": "' || TG_TABLE_NAME || '",
-      "operation": "update",
-      "timestamp": "' || CURRENT_TIMESTAMP || '",
-      "old_data": ' || row_to_json(OLD) || ',
-      "data": ' || row_to_json(NEW) || '}';
-
-  ELSIF TG_OP = 'DELETE' THEN
-    _json_ := '{"table": "' || TG_TABLE_NAME || '",
-      "operation": "delete",
-      "timestamp": "' || CURRENT_TIMESTAMP || '",
-      "data": ' || row_to_json(OLD) || '}';
+  IF TG_OP = 'INSERT' OR TG_OP = 'UPDATE' THEN
+    data := data || ', "data": ' || row_to_json(NEW);
   END IF;
 
-  PERFORM pg_notify(TG_TABLE_NAME::text, _json_);
+  IF TG_OP = 'DELETE' OR TG_OP = 'UPDATE' THEN
+    data := data || ', "old_data": ' || row_to_json(OLD);
+  END IF;
+
+  data := data || '}';
+
+  PERFORM pg_notify('{{= it.changesChannel }}', data);
 
   RETURN NULL;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION add_notify_trigger_to_table(table_name text) 
+CREATE OR REPLACE FUNCTION {{= it.names.addNotifyTrigger }}(table_name text) 
 RETURNS VOID as $$
 BEGIN
-  EXECUTE 'DROP TRIGGER IF EXISTS notify_trigger_event ON ' || table_name::regclass;
+  EXECUTE 'DROP TRIGGER IF EXISTS {{= it.names.notifyTrigger }} ON ' || table_name::regclass;
 
   EXECUTE '
-    CREATE TRIGGER notify_trigger_event
+    CREATE TRIGGER {{= it.names.notifyTrigger }}
       AFTER INSERT OR UPDATE OR DELETE
       ON ' || table_name::regclass || ' 
       FOR EACH ROW 
-      EXECUTE PROCEDURE notify_trigger()';
+      EXECUTE PROCEDURE {{= it.names.notifyTriggerFunc }}()';
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION remove_notify_trigger_from_table(table_name text)
+CREATE OR REPLACE FUNCTION {{= it.names.removeNotifyTrigger }}(table_name text)
 RETURNS VOID AS $$
 BEGIN
-  EXECUTE 'DROP TRIGGER IF EXISTS notify_trigger_event ON ' || table_name::regclass;
+  EXECUTE 'DROP TRIGGER IF EXISTS {{= it.names.notifyTrigger }} ON ' || table_name::regclass;
 END;
 $$ LANGUAGE plpgsql;
