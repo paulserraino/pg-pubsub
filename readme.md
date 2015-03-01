@@ -14,19 +14,37 @@ psql -h localhost -d mydb < install.sql
 ##Example
 
 ```js
-var dispatcher = require('pg-dispatch')(client);
+var dispatcher = require('pg-dispatch')({
+    // client: ... // pg client can be passed or
+    conString: '', // same as for pg driver
+    // Default options:
+    // changesChannel: 'data_changes',
+    // names: {
+    //    notifyTrigger: 'data_change_notify_trigger',
+    //    notifyTriggerFunc: 'data_change_notify_trigger_func',
+    //    addNotifyTrigger: 'add_notify_trigger_to_table',
+    //    removeNotifyTrigger: 'remove_notify_trigger_to_table'
+    // },
+    // operationEvents: true // false to NOT send events on each operation
+});
 
-dispatcher.subscribe('users')
+dispatcher.install(function(err) {
+    if (err) return console.log(err);
+    dispatcher.subscribe('users');
+});
+
 dispatcher.on('users:insert', function (error, data) {
 	if (error) throw error;	
 });
 ```
 ## API
-### .subscribe("table_name", callback)
-### .unsubscribe("table_name", callback)
-### .on("table_name:insert", callback)
-### .on("table_name:update", callback)
-### .on("table_name:delete", callback)
+### .install(callback)
+### .subscribe('table_name', callback)   // array of tables can be passed
+### .unsubscribe('table_name', callback) //  -"-
+### .on('table_name', callback)
+### .on('table_name:insert', callback) // when operationEvents is true (default)
+### .on('table_name:update', callback) // -"-
+### .on('table_name:delete', callback) // -"-
 
 ##License
 MIT
