@@ -25,7 +25,8 @@ var dispatcher = require('pg-dispatch')({
     //    addNotifyTrigger: 'add_notify_trigger_to_table',
     //    removeNotifyTrigger: 'remove_notify_trigger_to_table'
     // },
-    // operationEvents: true // false to NOT send events on each operation
+    // operationEvents: true, // false to NOT send events on each operation
+    // checkUpdates: true // only notify if update changes record
 });
 
 dispatcher.install(function(err) {

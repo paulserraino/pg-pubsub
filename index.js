@@ -18,7 +18,8 @@ var DEFAULTS = {
         addNotifyTrigger: 'add_notify_trigger_to_table',
         removeNotifyTrigger: 'remove_notify_trigger_to_table'
     },
-    operationEvents: true
+    operationEvents: true,
+    checkUpdates: true // only notify if update changes record, can be set to false if record comparison is expensive
 };
 
 function PGObserver (opts) {
@@ -42,6 +43,10 @@ _.extendProto(PGObserver, {
 module.exports = PGObserver;
 
 
+/**
+ * Creates procedures in the database
+ * @param  {Function} cb optional callback
+ */
 function install(cb) {
     var installSQL = installSQLtemplate(this.options);
     this.client.connect();
@@ -49,8 +54,12 @@ function install(cb) {
 }
 
 
+/**
+ * Subscribes to changes in the table(s)
+ * @param  {String|Array<String>} tables  table name (or array of table names) to subscribe to
+ * @param  {Function}             cb      optional callback
+ */
 function subscribe(tables, cb) {
-    cb = cb || _.noop;
     var self = this;
     var sql = getSQL.call(this, tables, addTrigger);
     this.client.query(sql, function (err, data) {
@@ -78,6 +87,11 @@ function subscribe(tables, cb) {
 }
 
 
+/**
+ * Unsubscribes from changes in the table(s)
+ * @param  {String|Array<String>} tables  table name (or array of table names) to unsubscribe from
+ * @param  {Function}             cb      optional callback
+ */
 function unsubscribe(tables, cb) {
     var sql = getSQL.call(this, tables, removeTrigger);
     this.client.query(sql, cb);

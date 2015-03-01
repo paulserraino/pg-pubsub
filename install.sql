@@ -2,6 +2,12 @@ CREATE OR REPLACE FUNCTION {{= it.names.notifyTriggerFunc }}() RETURNS trigger A
 DECLARE
   data text := '{}';
 BEGIN
+  {{? it.checkUpdates }}
+  IF TG_OP = 'UPDATE' AND OLD IS NOT DISTINCT FROM NEW THEN
+    RETURN NULL;
+  END IF;
+  {{?}}
+
   data := '{"table": "' || TG_TABLE_NAME || '",
       "operation": "' || TG_OP || '",
       "timestamp": "' || CURRENT_TIMESTAMP || '"';
