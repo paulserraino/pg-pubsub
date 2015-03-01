@@ -66,7 +66,7 @@ function subscribe(tables, cb) {
                     data = JSON.parse(data.payload);
                     self.emit(data.table, data);
                     if (self.options.operationEvents)
-                        self.emit(data.table + ':' + data.operation, data);
+                        self.emit(data.table + ':' + data.operation.toLowerCase(), data);
                 });
                 self._listening = true;
 
