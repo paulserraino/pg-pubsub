@@ -19,7 +19,8 @@ var DEFAULTS = {
         removeNotifyTrigger: 'remove_notify_trigger_to_table'
     },
     operationEvents: true,
-    checkUpdates: true // only notify if update changes record, can be set to false if record comparison is expensive
+    checkUpdates: true, // only notify if update changes record, can be set to false if record comparison is expensive
+    sendRecordId: false // send only record IDs, true - to send column 'id', string to send column with a given name
 };
 
 function PGObserver (opts) {
@@ -27,6 +28,7 @@ function PGObserver (opts) {
     this.client = opts.client || new pg.Client(opts.conString);
     if (opts.names) opts.names = _.extend(_.clone(DEFAULTS.names), opts.names);
     opts = _.extend(_.clone(DEFAULTS), opts);
+    if (opts.sendRecordId === true) opts.sendRecordId = 'id';
     this.options = opts;
 };
 

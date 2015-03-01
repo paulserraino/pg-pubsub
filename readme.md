@@ -27,6 +27,10 @@ var dispatcher = require('pg-dispatch')({
     // },
     // operationEvents: true, // false to NOT send events on each operation
     // checkUpdates: true // only notify if update changes record
+    // sendRecordId: false // send only record IDs, true - to send column 'id',
+                           // string to send column with a given name.
+                           // this column should be a number.
+                           // by default the whole record data is sent.
 });
 
 dispatcher.install(function(err) {

@@ -1,6 +1,6 @@
 var assert = require('assert')
 var pg = require('pg')
-var PGEvents = require('../')
+var PGEvents = require('../index')
 var connect = require('./connect')
 
 before(function (done) {
@@ -74,7 +74,6 @@ describe('PG Events', function() {
           validCache(self.cache);
           assert.equal(self.cache.operation, 'UPDATE');
           assert.notDeepEqual(self.cache.old_data, {}, 'cache old_data is empty');
-          self.cache = {};
 
           done();
         }, 100);
@@ -83,6 +82,7 @@ describe('PG Events', function() {
 
     it('should not send message when no changes', function(done) {
       var self = this;
+      this.cache = {};
       this.client.query("UPDATE users SET name='cat' WHERE name='cat'", function (error) {
         if (error) return done(error);
 

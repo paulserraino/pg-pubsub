@@ -12,12 +12,15 @@ BEGIN
       "operation": "' || TG_OP || '",
       "timestamp": "' || CURRENT_TIMESTAMP || '"';
 
+  {{ var id = it.sendRecordId; }}
   IF TG_OP = 'INSERT' OR TG_OP = 'UPDATE' THEN
-    data := data || ', "data": ' || row_to_json(NEW);
+    data := data || ', "data": ' ||
+      {{?id}} '{ "{{=id}}": ' || NEW.{{=id}}::text || ' }'; {{??}} row_to_json(NEW); {{?}}
   END IF;
 
   IF TG_OP = 'DELETE' OR TG_OP = 'UPDATE' THEN
-    data := data || ', "old_data": ' || row_to_json(OLD);
+    data := data || ', "old_data": ' ||
+      {{?id}} '{ "{{=id}}": ' || OLD.{{=id}}::text || ' }'; {{??}} row_to_json(OLD); {{?}}
   END IF;
 
   data := data || '}';
