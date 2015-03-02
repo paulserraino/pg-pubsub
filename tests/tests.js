@@ -1,16 +1,16 @@
 var assert = require('assert')
 var pg = require('pg')
-var PGEvents = require('../')
+var PGEvents = require('../index')
 var connect = require('./connect')
 
 before(function (done) {
   var self = this;
   connect(function (client) {
-    self.client = client
-    self.pgevents = PGEvents({ conString: 'postgres://localhost/test' })
-    done()
-  })
-})
+    self.client = client;
+    self.pgevents = PGEvents({ conString: 'postgres://localhost/test' });
+    done();
+  });
+});
 
 describe('PG Events', function() {
 
@@ -75,6 +75,19 @@ describe('PG Events', function() {
           assert.equal(self.cache.operation, 'UPDATE');
           assert.notDeepEqual(self.cache.old_data, {}, 'cache old_data is empty');
 
+          done();
+        }, 100);
+      });
+    });
+
+    it('should not send message when no changes', function(done) {
+      var self = this;
+      this.cache = {};
+      this.client.query("UPDATE users SET name='cat' WHERE name='cat'", function (error) {
+        if (error) return done(error);
+
+        setTimeout(function() {
+          assert.deepEqual(self.cache, {}, 'cache is NOT empty')
           done();
         }, 100);
       });
