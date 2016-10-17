@@ -1,6 +1,6 @@
 {
   "name": "pg-dispatch",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "postgreSQL listen/notify events",
   "main": "index.js",
   "scripts": {

@@ -35,13 +35,18 @@ var dispatcher = require('pg-dispatch')({
 
 dispatcher.install(function(err) {
     if (err) return console.log(err);
-    dispatcher.subscribe('users');
+    dispatcher.subscribe('users', function(error, data) {
+    	if(error) throw error;
+		console.log('Subscribed:' data);
+    });
 });
 
 dispatcher.on('users:insert', function (error, data) {
-	if (error) throw error;	
+	if (error) throw error;
+	console.log(data);
 });
 ```
+
 ## API
 #### .install(callback)
 #### .subscribe('table_name', callback)   // array of tables can be passed
